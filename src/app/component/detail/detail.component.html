@@ -1,0 +1,42 @@
+<div class="form-inline">
+    <div class="form-group">
+        <label for="accordGroup">Základní tón&nbsp;</label>
+        <select [(ngModel)]="accordGroup" class="form-control form-control-sm" id="accordGroup">
+            <option *ngFor="let groupEnumValue of accordGroupEnum" [value]="groupEnumValue">{{groupEnumValue}}</option>
+        </select>
+    </div>
+</div>
+<br>
+<div class="form-inline">
+    <div class="form-group">
+        <label for="accordName">Název akordu&nbsp;</label>
+        <input [(ngModel)]="accordName" type="text" class="form-control form-control-sm" id="accordName">
+    </div>
+</div>
+<br>
+<div *ngIf="accordSort" class="form-inline">
+    <div class="form-group">
+        <label for="accordSort">Pořadí&nbsp;</label>
+        <input [(ngModel)]="accordSort" type="number" class="form-control form-control-sm" id="accordSort">
+    </div>
+</div>
+<br>
+<table>
+    <tr *ngFor="let values of renderData; let row = index">
+        <td *ngFor="let value of values; let column = index" (click)="onClick($event, row, column)">{{value}}</td>
+    </tr>
+</table>
+<br>
+<button (click)="saveData()" class="btn btn-success">Uložit</button>
+
+<select id="itemSelect"
+        class="form-control form-control-sm contextSelect"
+        [size]="selectOption.length"
+        [(ngModel)]="selectedValue"
+        [style.top]="selectInputPosition.top"
+        [style.left]="selectInputPosition.left"
+        [class.d-none]="selectInputVisibility === false"
+        (click)="onSelect()"
+>
+    <option *ngFor="let optionValue of selectOption" [value]="optionValue">{{optionValue}}</option>
+</select>
