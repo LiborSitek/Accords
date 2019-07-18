@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccordService } from '../../service/accord.service';
 import { ActivatedRoute, Router } from '@angular/router';
-
-const accordGroupEnum = ['C', 'D', 'E', 'F', 'G', 'A', 'H'];
+import { Config } from '../../../config';
 
 @Component({
   selector: 'app-detail',
@@ -19,10 +18,11 @@ export class DetailComponent implements OnInit {
     ['', '', '', '', '', '', '']
   ];
   accordId: number = null;
-  accordGroup = 'C';
-  accordName: string;
+  accordGroup = Config.accordGroupEnum[0];
+  accordType = Config.accordTypeEnum[0];
   accordSort: number;
-  accordGroupEnum = accordGroupEnum;
+  accordGroupEnum = Config.accordGroupEnum;
+  accordTypeEnum = Config.accordTypeEnum;
   selectInputVisibility = false;
   selectInputPosition = {
     top: '0px', left: '0px'
@@ -41,7 +41,7 @@ export class DetailComponent implements OnInit {
       this.accordService.getAccord(id).subscribe(accord => {
         this.accordId = accord.id_accord;
         this.accordGroup = accord.group;
-        this.accordName = accord.name;
+        this.accordType = accord.type;
         this.accordSort = accord.sort;
         this.renderData = JSON.parse(accord.render_data);
       });
@@ -55,11 +55,11 @@ export class DetailComponent implements OnInit {
     this.selectInputPosition.top = event.clientY + 'px';
     this.selectInputPosition.left = event.clientX + 'px';
     if (this.selectedColumn === 6) {
-      this.selectOption = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+      this.selectOption = Config.thresholdSelect;
     } else if (this.selectedRow === 0) {
-      this.selectOption = ['', 'x', 'o'];
+      this.selectOption = Config.stringRemarkSelect;
     } else {
-      this.selectOption = ['', '1', '2', '3', '4', '5'];
+      this.selectOption = Config.chordFingerSelect;
     }
     this.selectInputVisibility = true;
   }
@@ -70,22 +70,32 @@ export class DetailComponent implements OnInit {
   }
 
   saveData() {
-    if (this.accordName) {
-      const data = {
-        group: this.accordGroup,
-        name: this.accordName,
-        sort: this.accordSort,
-        render_data: this.renderData
-      };
+    const data = {
+      group: this.accordGroup,
+      type: this.accordType,
+      sort: this.accordSort,
+      render_data: this.renderData
+    };
+    this.accordService.getAccordsByGroupAndType(this.accordGroup, this.accordType).subscribe(accordList => {
       if (this.accordId) {
-        this.accordService.updateAccord(this.accordId, data).subscribe(value => {
-          this.router.navigate(['/list']);
-        });
+        if (accordList.length === 0 || (accordList.length === 1 && accordList[0].id_accord === this.accordId)) {
+          this.accordService.updateAccord(this.accordId, data).subscribe(value => {
+            this.router.navigate(['/list']);
+          });
+        }
       } else {
-        this.accordService.saveAccord(data).subscribe(value => {
-          this.router.navigate(['/list']);
-        });
+        if (accordList.length === 0) {
+          this.accordService.saveAccord(data).subscribe(value => {
+            this.router.navigate(['/list']);
+          });
+        }
       }
-    }
+    });
+  }
+
+  deleteAccord() {
+    this.accordService.deleteAccord(this.accordId).subscribe(value => {
+      this.router.navigate(['/list']);
+    });
   }
 }

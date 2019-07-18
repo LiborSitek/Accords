@@ -1,3 +1,7 @@
+<div *ngIf="accordId" class="text-right">
+    <button (click)="deleteAccord()" class="btn btn-danger">Smazat</button>
+</div>
+
 <div class="form-inline">
     <div class="form-group">
         <label for="accordGroup">Základní tón&nbsp;</label>
@@ -6,20 +10,25 @@
         </select>
     </div>
 </div>
+
 <br>
 <div class="form-inline">
     <div class="form-group">
-        <label for="accordName">Název akordu&nbsp;</label>
-        <input [(ngModel)]="accordName" type="text" class="form-control form-control-sm" id="accordName">
+        <label for="accordType">Typ akordu&nbsp;</label>
+        <select [(ngModel)]="accordType" class="form-control form-control-sm" id="accordType">
+            <option *ngFor="let typeEnumValue of accordTypeEnum" [value]="typeEnumValue">{{typeEnumValue}}</option>
+        </select>
     </div>
 </div>
 <br>
+
 <div *ngIf="accordSort" class="form-inline">
     <div class="form-group">
         <label for="accordSort">Pořadí&nbsp;</label>
         <input [(ngModel)]="accordSort" type="number" class="form-control form-control-sm" id="accordSort">
     </div>
 </div>
+
 <br>
 <table>
     <tr *ngFor="let values of renderData; let row = index">
@@ -27,7 +36,9 @@
     </tr>
 </table>
 <br>
-<button (click)="saveData()" class="btn btn-success">Uložit</button>
+
+<button (click)="saveData()" class="btn btn-success">Uložit</button>&nbsp;
+<a routerLink="/list" class="btn btn-warning">Zpět</a>
 
 <select id="itemSelect"
         class="form-control form-control-sm contextSelect"

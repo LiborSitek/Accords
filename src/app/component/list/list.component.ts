@@ -21,17 +21,9 @@ export class ListComponent implements OnInit {
     });
   }
 
-  deleteAccord(idAccord: number) {
-    this.accordService.deleteAccord(idAccord).subscribe(value => {
-      this.accords = this.accords.filter((accord) => {
-        return accord.id_accord !== idAccord;
-      });
-    });
-  }
-
   filterAccordsByGroup(groupValue: string) {
     return this.accords.filter((accord) => {
       return accord.group === groupValue;
-    });
+    }).sort((a, b) => a.sort - b.sort);
   }
 }
