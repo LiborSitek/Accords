@@ -2,15 +2,22 @@ table {
     border-collapse: collapse;
 }
 
-table, th, td {
-    border: 1px solid black;
-}
-
 td {
+    border: 1px solid black;
     width: 40px;
     height: 40px;
     cursor: pointer;
     text-align: center;
+}
+
+.remarkCell {
+    border-top-style: none;
+    border-bottom-width: 2px;
+}
+
+.thresholdColumn {
+    border-right-style: none;
+    border-left-width: 2px;
 }
 
 .contextSelect {

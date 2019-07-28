@@ -33,18 +33,30 @@ $container['db'] = function ($container) {
 
 $app->get('/api/accords', function (Request $request, Response $response, array $args) {
     $accordMapper = new AccordMapper($this->db);
-    return $response->withJson($accordMapper->findAll());
+    $result = $accordMapper->findAll();
+    array_walk($result, function (& $row) {
+        $row['render_data'] = json_decode($row['render_data']);
+    });
+    return $response->withJson($result);
 });
 
 $app->get('/api/accord/{id}', function (Request $request, Response $response, array $args) {
     $accordMapper = new AccordMapper($this->db);
-    return $response->withJson($accordMapper->getById($args['id']));
+    $result = $accordMapper->getById($args['id']);
+    if ($result) {
+        $result['render_data'] = json_decode($result['render_data']);
+    }
+    return $response->withJson($result);
 });
 
 $app->post('/api/accord/findByGroupAndType', function (Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     $accordMapper = new AccordMapper($this->db);
-    return $response->withJson($accordMapper->findByAccordGroupAndType($data['group'], $data['type']));
+    $result = $accordMapper->findByAccordGroupAndType($data['group'], $data['type']);
+    array_walk($result, function (& $row) {
+        $row['render_data'] = json_decode($row['render_data']);
+    });
+    return $response->withJson($result);
 });
 
 $app->post('/api/accord', function (Request $request, Response $response, array $args) {
@@ -52,7 +64,7 @@ $app->post('/api/accord', function (Request $request, Response $response, array 
     $accordMapper = new AccordMapper($this->db);
 
     return $response->withJson([
-        'result' => (int) $accordMapper->create($data['group'], $data['type'], json_encode($data['render_data']))
+        'result' => $accordMapper->create($data['group'], $data['type'], json_encode($data['render_data']))
     ]);
 });
 
@@ -61,13 +73,13 @@ $app->put('/api/accord/{id}', function (Request $request, Response $response, ar
     $accordMapper = new AccordMapper($this->db);
 
     return $response->withJson([
-        'result' => (int) $accordMapper->update($args['id'], $data['group'], $data['type'], $data['sort'], json_encode($data['render_data']))
+        'result' => $accordMapper->update($args['id'], $data['group'], $data['type'], $data['sort'], json_encode($data['render_data']))
     ]);
 });
 
 $app->delete('/api/accord/{id}', function (Request $request, Response $response, array $args) {
     $accordMapper = new AccordMapper($this->db);
-    return $response->withJson(['result' => (int) $accordMapper->delete($args['id'])]);
+    return $response->withJson(['result' => $accordMapper->delete($args['id'])]);
 });
 
 $app->run();

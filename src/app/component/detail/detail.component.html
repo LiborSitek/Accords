@@ -1,11 +1,11 @@
-<div *ngIf="accordId" class="text-right">
+<div *ngIf="accord.id_accord" class="text-right">
     <button (click)="deleteAccord()" class="btn btn-danger">Smazat</button>
 </div>
 
 <div class="form-inline">
     <div class="form-group">
         <label for="accordGroup">Základní tón&nbsp;</label>
-        <select [(ngModel)]="accordGroup" class="form-control form-control-sm" id="accordGroup">
+        <select [(ngModel)]="accord.group" class="form-control form-control-sm" id="accordGroup">
             <option *ngFor="let groupEnumValue of accordGroupEnum" [value]="groupEnumValue">{{groupEnumValue}}</option>
         </select>
     </div>
@@ -15,24 +15,30 @@
 <div class="form-inline">
     <div class="form-group">
         <label for="accordType">Typ akordu&nbsp;</label>
-        <select [(ngModel)]="accordType" class="form-control form-control-sm" id="accordType">
+        <select [(ngModel)]="accord.type" class="form-control form-control-sm" id="accordType">
             <option *ngFor="let typeEnumValue of accordTypeEnum" [value]="typeEnumValue">{{typeEnumValue}}</option>
         </select>
     </div>
 </div>
 <br>
 
-<div *ngIf="accordSort" class="form-inline">
+<div *ngIf="accord.sort" class="form-inline">
     <div class="form-group">
         <label for="accordSort">Pořadí&nbsp;</label>
-        <input [(ngModel)]="accordSort" type="number" class="form-control form-control-sm" id="accordSort">
+        <input [(ngModel)]="accord.sort" type="number" class="form-control form-control-sm" id="accordSort">
     </div>
 </div>
 
 <br>
 <table>
-    <tr *ngFor="let values of renderData; let row = index">
-        <td *ngFor="let value of values; let column = index" (click)="onClick($event, row, column)">{{value}}</td>
+    <tr *ngFor="let values of accord.render_data; let row = index">
+        <td *ngFor="let value of values; let column = index"
+            (click)="onClick($event, row, column)"
+            [class.remarkCell]="row === accordRemarkRow"
+            [class.thresholdColumn]="column === accordThresholdColumn"
+        >
+            {{value}}
+        </td>
     </tr>
 </table>
 <br>

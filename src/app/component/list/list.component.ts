@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AccordService } from '../../service/accord.service';
 import { Router } from '@angular/router';
-
-const accordGroupEnum = ['C', 'D', 'E', 'F', 'G', 'A', 'H'];
+import { Accord } from '../../model/accord';
+import { Config } from '../../../config';
 
 @Component({
   selector: 'app-list',
@@ -10,19 +10,20 @@ const accordGroupEnum = ['C', 'D', 'E', 'F', 'G', 'A', 'H'];
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  accords = [];
-  accordGroupEnum = accordGroupEnum;
+  accords: Accord[];
+  accordGroupEnum: string[];
 
   constructor(private accordService: AccordService, private router: Router) { }
 
   ngOnInit() {
+    this.accordGroupEnum = Config.accordGroupEnum;
     this.accordService.getAccords().subscribe(accords => {
       this.accords = accords;
     });
   }
 
-  filterAccordsByGroup(groupValue: string) {
-    return this.accords.filter((accord) => {
+  filterAccordsByGroup(groupValue: string): Accord[] {
+    return this.accords.filter(accord => {
       return accord.group === groupValue;
     }).sort((a, b) => a.sort - b.sort);
   }

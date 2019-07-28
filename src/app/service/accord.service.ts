@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Config } from '../../config';
+import { Accord } from '../model/accord';
+import { ApiResult } from '../model/apiResult';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -19,27 +21,27 @@ export class AccordService {
     private http: HttpClient
   ) { }
 
-  getAccords(): Observable<any> {
-    return this.http.get<any>(`${this.apiServer}/api/accords`);
+  getAccords(): Observable<Accord[]> {
+    return this.http.get<Accord[]>(`${this.apiServer}/api/accords`);
   }
 
-  getAccord(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiServer}/api/accord/${id}`);
+  getAccordById(id: number): Observable<Accord> {
+    return this.http.get<Accord>(`${this.apiServer}/api/accord/${id}`);
   }
 
-  getAccordsByGroupAndType(group: string, type: string): Observable<any> {
-    return this.http.post<any>(`${this.apiServer}/api/accord/findByGroupAndType`, JSON.stringify({group, type}), httpOption);
+  findAccordsByGroupAndType(group: string, type: string): Observable<Accord[]> {
+    return this.http.post<Accord[]>(`${this.apiServer}/api/accord/findByGroupAndType`, JSON.stringify({group, type}), httpOption);
   }
 
-  saveAccord(data: object): Observable<any> {
-    return this.http.post<any>(`${this.apiServer}/api/accord`, JSON.stringify(data), httpOption);
+  saveAccord(accord: Accord): Observable<ApiResult> {
+    return this.http.post<ApiResult>(`${this.apiServer}/api/accord`, JSON.stringify(accord), httpOption);
   }
 
-  updateAccord(id: number, data: object): Observable<any> {
-    return this.http.put<any>(`${this.apiServer}/api/accord/${id}`, JSON.stringify(data), httpOption);
+  updateAccord(accord: Accord): Observable<ApiResult> {
+    return this.http.put<ApiResult>(`${this.apiServer}/api/accord/${accord.id_accord}`, JSON.stringify(accord), httpOption);
   }
 
-  deleteAccord(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiServer}/api/accord/${id}`);
+  deleteAccord(id: number): Observable<ApiResult> {
+    return this.http.delete<ApiResult>(`${this.apiServer}/api/accord/${id}`);
   }
 }

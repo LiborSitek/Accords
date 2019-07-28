@@ -3,5 +3,5 @@ export interface Accord {
   group: string;
   type: string;
   sort: number;
-  renderData: string[][];
+  render_data: string[][];
 }

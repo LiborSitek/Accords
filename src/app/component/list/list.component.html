@@ -1,10 +1,12 @@
-<div *ngFor="let groupEnumValue of accordGroupEnum">
-    <strong>{{groupEnumValue}}</strong>
-    <ul class="list-inline">
-        <li *ngFor="let accord of filterAccordsByGroup(groupEnumValue)" class="list-inline-item">
-            <a routerLink="/edit/{{accord.id_accord}}" class="btn btn-outline-dark btn-sm">{{accord.group + accord.type}}</a>
-        </li>
-    </ul>
+<div *ngIf="accords">
+    <div *ngFor="let groupEnumValue of accordGroupEnum">
+        <strong>{{groupEnumValue}}</strong>
+        <ul class="list-inline">
+            <li *ngFor="let accord of filterAccordsByGroup(groupEnumValue)" class="list-inline-item">
+                <a routerLink="/edit/{{accord.id_accord}}" class="btn btn-outline-dark btn-sm">{{accord.group + accord.type}}</a>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div>
